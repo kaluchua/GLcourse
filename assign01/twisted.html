@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+        <title>2D Sierpinski Gasket</title>
+
+        <script id="vertex-shader" type="x-shader/x-vertex">
+            attribute vec2 vPosition;
+
+            void main() {
+                float d = sqrt(vPosition.x*vPosition.x+vPosition.y*vPosition.y);
+                vec2 Pos;
+                float theta = 0.5;
+                Pos.x = vPosition.x*cos(d*theta)-vPosition.y*sin(d*theta);
+                Pos.y = vPosition.y*cos(d*theta)+vPosition.x*sin(d*theta);
+                gl_Position = vec4(Pos, 0.0, 1.0);
+            }
+        </script>
+
+        <script id="fragment-shader" type="x-shader/x-fragment">
+            precision mediump float;
+
+            void main() {
+                gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+            }
+        </script>
+
+        <script type="text/javascript" src="../libs/webgl-utils.js"></script>
+        <script type="text/javascript" src="../libs/initShaders.js"></script>
+        <script type="text/javascript" src="../libs/MV.js"></script>
+        <script type="text/javascript" src="twisted.js"></script>
+    </head>   
+
+    <body>
+        <div>
+            recursive steps  0 <input id="slider" type="range"
+             min="0" max="5" step="1" value="0" />
+             5
+        </div>
+
+        <canvas id="gl-canvas" width="512" height="512">
+            Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+    </body>
+
+</html>
