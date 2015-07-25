@@ -1,6 +1,5 @@
 "use strict";
 
-
 //  GL Context Stuff
 var canvas;
 var gl;
@@ -28,6 +27,9 @@ var colors = [
 
 var colorsArray = [[]];
 
+var lineWidth  = 1.0; 
+var widthArray = []; 
+
 function initListener() {
 
     canvas.addEventListener("mousedown", function(ev) {
@@ -35,6 +37,7 @@ function initListener() {
         var index = curvesArray.length - 1;
         curvesArray[index] = [];
         colorsArray[index] = [];
+        widthArray[index]  = lineWidth;
     });
 
     canvas.addEventListener("mouseup", function(ev) {
@@ -58,9 +61,15 @@ function initListener() {
     });
 
     var m = document.getElementById("mymenu");
-
     m.addEventListener("click", function() {
        cIndex = m.selectedIndex;
+     });
+
+    var w = document.getElementById("mywidth");
+    w.addEventListener("click", function() {
+        lineWidth = w.selectedIndex + 1;
+        console.log(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE));
+        console.log(lineWidth);
      });
 
 }
@@ -82,8 +91,6 @@ function initWebGL()
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
-
-
     // Load the data into the GPU
     vBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
@@ -103,8 +110,7 @@ function initWebGL()
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
 
-
-
+    gl.lineWidth(lineWidth);
     gl.drawArrays( gl.LINE_STRIP, 0, 0 );
 
     // Initialize our Event listener
@@ -122,11 +128,11 @@ function drawCurve(index) {
     gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(curvesArray[index]), gl.STATIC_DRAW );
 
+    gl.lineWidth(widthArray[index]);
     gl.drawArrays( gl.LINE_STRIP, 0, curvesArray[index].length );
 };
 
 function drawScreen() {
-//    gl.clear( gl.COLOR_BUFFER_BIT );
     for (var i=0;i<curvesArray.length;i++) {
         drawCurve(i);
     }
