@@ -1,65 +1,55 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-        <title>2D Sierpinski Gasket</title>
+<head>
+    <title>Painting application.</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <style type="text/css">
-            canvas {border: 2px dotted blue;}
-        </style>
+    <link rel="stylesheet" href="css/style.css" />
 
-        <script id="vertex-shader" type="x-shader/x-vertex">
-            attribute vec4 vPosition;
-            attribute vec4 vColor;
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        attribute vec4 vColor;
 
-            varying vec4 fColor;
-            void main() {
-                gl_Position = vPosition;
-                fColor = vColor;
-            }
-        </script>
+        varying vec4 fColor;
+        void main() {
+            gl_Position = vPosition;
+            fColor = vColor;
+        }
+    </script>
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
 
-        <script id="fragment-shader" type="x-shader/x-fragment">
-            precision mediump float;
+        varying vec4 fColor;
+        void main() {
+            gl_FragColor = fColor;
+        }
+    </script>
+    <script type="text/javascript" src="../libs/webgl-utils.js"></script>
+    <script type="text/javascript" src="../libs/initShaders.js"></script>
+    <script type="text/javascript" src="../libs/MV.js"></script>
+    <script type="text/javascript" src="paint.js"></script>
+</head>   
 
-            varying vec4 fColor;
-            void main() {
-                gl_FragColor = fColor;
-            }
-        </script>
+<body>
+    <canvas id="gl-canvas" width="512" height="512">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
 
-        <script type="text/javascript" src="../libs/webgl-utils.js"></script>
-        <script type="text/javascript" src="../libs/initShaders.js"></script>
-        <script type="text/javascript" src="../libs/MV.js"></script>
-        <script type="text/javascript" src="paint.js"></script>
-    </head>   
+    <select id = "mymenu" size = "7">
+        <option value = "0">Black</option>
+        <option value = "1">Red</option>
+        <option value = "2">Yellow</option>
+        <option value = "3">Green</option>
+        <option value = "4">Blue</option>
+        <option value = "5">Magenta</option>
+        <option value = "6">Cyan</option>
+    </select>
 
-    <body>
-
-        <h1>Twisted Serpinski Triangle</h1>
-
-        <canvas id="gl-canvas" width="512" height="512">
-            Oops ... your browser doesn't support the HTML5 canvas element
-        </canvas>
-
-        <div>
-            <select id = "mymenu" size = "7">
-                <option value = "0">Black</option>
-                <option value = "1">Red</option>
-                <option value = "2">Yellow</option>
-                <option value = "3">Green</option>
-                <option value = "4">Blue</option>
-                <option value = "5">Magenta</option>
-                <option value = "6">Cyan</option>
-            </select>
-        </div>
-
-        <div>
-            <select id = "mywidth" size = "3">
-                <option value = "1">fin</option>
-                <option value = "2">normal</option>
-                <option value = "3">large</option>
-            </select>
-        </div>
-
-    </body>
+    <select id = "mywidth" size = "3">
+        <option value = "1">fin</option>
+        <option value = "2">normal</option>
+        <option value = "3">large</option>
+    </select>
+</body>
 </html>
