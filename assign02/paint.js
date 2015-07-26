@@ -6,10 +6,12 @@ var gl;
 var vBuffer;
 var cBuffer;
 
+var rect; 
+var hover;
+
 //  Geometry Stuff
 var recording = false;
 var maxVertices = 2000;
-//var vertices = [ ];
 var curvesArray = [[]];
 
 //  Geometry Stuff
@@ -50,13 +52,21 @@ function initListener() {
 
     canvas.addEventListener("mousemove", function(ev) {
         if (recording) {
-            var t = vec2(-1 + 2*ev.clientX/canvas.width, 
-                         -1 + 2*(canvas.height-ev.clientY)/canvas.height);
+            var t = vec2(-1 + 2*(ev.clientX - rect.left)/canvas.width, 
+                         -1 + 2*(canvas.height - (ev.clientY - rect.top))/canvas.height);
             var c = colors[cIndex];
             var index = curvesArray.length - 1;
             curvesArray[index].push(t);
             colorsArray[index].push(c);
             drawScreen();
+        }
+    });
+
+    canvas.addEventListener("mouseleave", function() {
+        if (recording) {
+            drawScreen();
+            curvesArray.push([]);
+            recording = false;
         }
     });
 
@@ -78,6 +88,9 @@ function initListener() {
 function initWebGL()
 {
     canvas = document.getElementById( "gl-canvas" );
+    rect = canvas.getBoundingClientRect();
+    //console.log("rect : " + rect.left);
+    //console.log("rect : " + rect.top);
 
     gl = WebGLUtils.setupWebGL( canvas );
     if ( !gl ) { alert( "WebGL isn't available" ); }
@@ -100,7 +113,6 @@ function initWebGL()
     var vPosition = gl.getAttribLocation( program, "vPosition" );
     gl.vertexAttribPointer( vPosition, 2, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
-
 
     cBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);

@@ -1,3 +1,10 @@
+body {
+    margin: 5px;
+    padding: 0px;
+}
 canvas {
     border: 2px dotted blue;
 }   
+canvas:hover {
+    border: 2px solid red;
+}
