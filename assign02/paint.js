@@ -15,6 +15,7 @@ var maxVertices = 2000;
 var curvesArray = [[]];
 
 //  Geometry Stuff
+// var cIndex = parseInt(document.getElementById("mywidth").value);
 var cIndex = 0;
 
 var colors = [
@@ -127,6 +128,8 @@ function initWebGL()
 
     // Initialize our Event listener
     initListener(); 
+
+    cIndex = parseInt(document.getElementById("mywidth").value);
 
     render();
 };
