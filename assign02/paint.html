@@ -3,7 +3,6 @@
 <head>
     <title>Painting application.</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="stylesheet" href="css/style.css" />
 
@@ -47,9 +46,17 @@
     </select>
 
     <select id = "mywidth" size = "3">
-        <option value = "1">fin</option>
-        <option value = "2">normal</option>
-        <option value = "3">large</option>
+        <option value = "1">Thin</option>
+        <option value = "2">Normal</option>
+        <option value = "3">Large</option>
     </select>
+    <p>
+        Please take into account the following note. </br>
+        <ul>
+            <li> Under Google Chorme browser, the result of <b>gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)</b> is <b>[1 ,1]</b>. Thus you can't test the way I've implement the modification of line's width.</li>
+            <li> Please consider to use firefox. </li>
+            <li> <b>Don't use IE.</b> </li>
+        </ul>
+    </p>
 </body>
 </html>

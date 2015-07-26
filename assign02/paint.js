@@ -45,9 +45,9 @@ function initListener() {
     canvas.addEventListener("mouseup", function(ev) {
         if (recording) {
             drawScreen();
-        }
-        curvesArray.push([]);
-        recording = false;
+            curvesArray.push([]);
+            recording = false;
+       }
     });
 
     canvas.addEventListener("mousemove", function(ev) {
