@@ -24,6 +24,9 @@ var cFront = vec4(1.0,0.0,0.0,1.0);
 var c1 = vec4(1.0,0.0,0.0,1.0);
 var c2 = vec4(0.0,1.0,0.0,1.0);
 var c3 = vec4(0.0,0.0,1.0,1.0);
+var c4 = vec4(1.0,1.0,0.0,1.0);
+var c5 = vec4(0.0,1.0,1.0,1.0);
+var c6 = vec4(1.0,0.0,1.0,1.0);
 
 
 function rot(c) {
@@ -165,11 +168,25 @@ function divideTriangle( a, b, c, co, count ) {
 }
 
 
+function square( a, b, c, d, co) {
+    points.push( a, b, c );
+    points.push( a, c, d );
+    if (maxwell) {
+        colors.push( c1, c2, c3);
+        colors.push( c1, c3, c4);
+    } else {
+        colors.push( co, co, co);
+        colors.push( co, co, co);
+    }
+}
+
+
 function divideSquare( a, b, c, d, co, count ) {
     // check for end of recursion
     if ( count == 0 ) {
-        triangle( a, b, c, co );
-        triangle( c, d, a, co );
+//        triangle( a, b, c, co );
+//        triangle( c, d, a, co );
+          square(a, b, c, d, co );
     }
     else {
         //bisect the sides
@@ -191,12 +208,33 @@ function divideSquare( a, b, c, d, co, count ) {
     }
 }
 
+
+function penta( a, b, c, d, e, co) {
+    points.push( a, b, c );
+    points.push( a, c, d );
+    points.push( a, d, e );
+    if (maxwell) {
+        colors.push( c1, c2, c3);
+        colors.push( c1, c3, c4);
+        colors.push( c1, c4, c5);
+    } else {
+        colors.push( co, co, co);
+        colors.push( co, co, co);
+        colors.push( co, co, co);
+    }
+}
+
+
+
 function dividePenta( a, b, c, d, e, co, count ) {
     // check for end of recursion
     if ( count == 0 ) {
+        /*
         triangle( a, b, c, co );
         triangle( a, c, d, co );
         triangle( a, d, e, co );
+        */
+       penta(a, b, c, d, e, co);
     }
     else {
         //bisect the sides
@@ -221,13 +259,38 @@ function dividePenta( a, b, c, d, e, co, count ) {
 }
 
 
+
+function hexa( a, b, c, d, e, f, co) {
+    points.push( a, b, c );
+    points.push( a, c, d );
+    points.push( a, d, e );
+    points.push( a, e, f );
+    if (maxwell) {
+        colors.push( c1, c2, c3);
+        colors.push( c1, c3, c4);
+        colors.push( c1, c4, c5);
+        colors.push( c1, c5, c6);
+    } else {
+        colors.push( co, co, co);
+        colors.push( co, co, co);
+        colors.push( co, co, co);
+        colors.push( co, co, co);
+    }
+}
+
+
+
+
 function divideHexa( a, b, c, d, e, f, co, count ) {
     // check for end of recursion
     if ( count == 0 ) {
+        /*
         triangle( a, b, c, co );
         triangle( a, c, d, co );
         triangle( a, d, e, co );
         triangle( a, e, f, co );
+        */
+       hexa(a, b, c, d, e, f, co);
     }
     else {
         //bisect the sides
