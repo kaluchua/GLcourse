@@ -10,7 +10,7 @@ var numTimesToSubdivide = 0;
 var theta = 0; 
 var thetaLoc; 
 var polygon = 0; 
-var polygonArray = ["triangle", "square", "penta"]; 
+var polygonArray = ["triangle", "square", "penta", "hexa"]; 
 
 var bufferId;
 
@@ -20,6 +20,22 @@ var colors = [];
 var cBack  = vec4(1.0,1.0,1.0,1.0);
 var cFront = vec4(1.0,0.0,0.0,1.0); 
 
+
+var c1 = vec4(1.0,0.0,0.0,1.0);
+var c2 = vec4(0.0,1.0,0.0,1.0);
+var c3 = vec4(0.0,0.0,1.0,1.0);
+
+
+function rot(c) {
+    if (c === c1) {
+        return c2;
+    } 
+    if (c === c2) {
+        return c3;
+    } 
+    return c1;
+}
+
 function changeColor(current) {
     if (current === cBack) {
         return cFront;
@@ -28,6 +44,7 @@ function changeColor(current) {
 }
 
 var motifs = false;
+var maxwell = false;
 
 function init() {
     canvas = document.getElementById( "gl-canvas" );
@@ -82,7 +99,7 @@ function init() {
     var w = document.getElementById("polygon");
     w.addEventListener("click", function() {
         polygon = w.selectedIndex;
-        console.log(polygon);
+//        console.log(polygon);
         render();
     });
 
@@ -96,13 +113,30 @@ function init() {
         render();
     });
 
+    var mx = document.getElementById("maxwell");
+    mx.addEventListener("click", function() {
+        if (mx.selectedIndex === 1) {
+            maxwell = true;
+        } else {
+            maxwell = false;
+        }
+        render();
+    });
+
+
+
+
     render();
 };
 
 
 function triangle( a, b, c, co) {
     points.push( a, b, c );
-    colors.push( co, co, co);
+    if (maxwell) {
+        colors.push( c1, c2, c3);
+    } else {
+        colors.push( co, co, co);
+    }
 }
 
 function divideTriangle( a, b, c, co, count ) {
@@ -186,6 +220,39 @@ function dividePenta( a, b, c, d, e, co, count ) {
     }
 }
 
+
+function divideHexa( a, b, c, d, e, f, co, count ) {
+    // check for end of recursion
+    if ( count == 0 ) {
+        triangle( a, b, c, co );
+        triangle( a, c, d, co );
+        triangle( a, d, e, co );
+        triangle( a, e, f, co );
+    }
+    else {
+        //bisect the sides
+        var ab = mix( a, b, 0.5 );
+        var af = mix( a, f, 0.5 );
+        var bc = mix( b, c, 0.5 );
+        var cd = mix( c, d, 0.5 );
+        var de = mix( d, e, 0.5 );
+        var ef = mix( e, f, 0.5 );
+
+        --count;
+
+        // three new triangles
+        divideTriangle( a, ab, af, co, count );
+        divideTriangle( b, ab, bc, co, count );
+        divideTriangle( c, bc, cd, co, count );
+        divideTriangle( d, cd, de, co, count );
+        divideTriangle( e, de, ef, co, count );
+        divideTriangle( f, ef, af, co, count );
+        if (motifs) {
+            divideHexa( ab, bc, cd, de, ef, af, changeColor(co), count );
+        }
+    }
+}
+
 window.onload = init;
 
 function render() {
@@ -216,7 +283,7 @@ function render() {
 
         case "penta":
             var vertices = [];
-            var rad = 0.8;
+            var rad = 0.9;
             var da   = 6.2832 / 5.0;   // da is central angle between vertices in radians
             for (var v = 0; v < 5; v++)  {                  
                 vertices.push(vec2( rad*Math.cos (v*da), rad*Math.sin (v*da) ));
@@ -224,6 +291,19 @@ function render() {
             dividePenta( vertices[0], vertices[1], vertices[2], vertices[3],
                          vertices[4],  cFront, numTimesToSubdivide);
             break;
+
+        case "hexa":
+            var vertices = [];
+            var rad = 0.8;
+            var da   = 6.2832 / 6.0;   // da is central angle between vertices in radians
+            for (var v = 0; v < 6; v++)  {                  
+                vertices.push(vec2( rad*Math.cos (v*da), rad*Math.sin (v*da) ));
+            }   
+            divideHexa( vertices[0],  vertices[1], vertices[2], vertices[3],
+                         vertices[4], vertices[5],  cFront, numTimesToSubdivide);
+            break;
+
+
 
         default:
             alert("nothing work");
