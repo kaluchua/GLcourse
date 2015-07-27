@@ -8,6 +8,8 @@
 
     <script id="vertex-shader" type="x-shader/x-vertex">
         attribute vec2 vPosition;
+        attribute vec4 vColor;
+        varying vec4 fColor; 
         uniform float theta;
 
         void main() {
@@ -17,13 +19,15 @@
             Pos.y = vPosition.y*cos(d*theta)+vPosition.x*sin(d*theta);
 
             gl_Position = vec4(Pos, 0.0, 1.0);
+            fColor = vColor;
         }
     </script>
     <script id="fragment-shader" type="x-shader/x-fragment">
         precision mediump float;
 
+        varying vec4 fColor; 
         void main() {
-            gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+            gl_FragColor = fColor;
         }
     </script>
 
@@ -52,10 +56,21 @@
     </div>
 
     <select id = "polygon" size = "3">
-        <option value="1"> Triangle </option>
+        <option value="1" selected> Triangle </option>
         <option value="2"> Square   </option>
         <option value="3"> Penta   </option>
     </select>
+
+    <select id = "motifs" size = "2">
+        <option value="1" selected> Classique   </option>
+        <option value="2"> Dual Inside </option>
+    </select>
+
+    <p>
+        The dual inside motif is a pure invention. As after the frist step the same motif appear in 
+        with background color I just reverse the color et reapply the process in the primitive motif. 
+        The result is pretty good on more complexe polygone.
+    </p>
 
 </body>
 </html>
